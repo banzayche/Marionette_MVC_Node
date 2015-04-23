@@ -51,7 +51,7 @@ MyApp.module('TodoList', function(TodoList, App, Backbone){
 				Backbone.history.navigate('/', {replace: false, trigger: false});
 				Backbone.history.navigate(route, {replace: false, trigger: true});
 			} else{
-				if(route === '/all' || route === '/done' || route === '/have_done'){
+				if(route === '/' || route === '/all' || route === '/done' || route === '/have_done'){
 					Backbone.history.navigate('/', {replace: false, trigger: false});
 					Backbone.history.navigate(route, {replace: false, trigger: true});
 					this.showAll();
