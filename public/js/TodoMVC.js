@@ -14,7 +14,7 @@ var App = Backbone.Marionette.Application.extend({
     // прорисовываем главныое рутовое представление
     MyApp.setRootLayout();
     // стартуем бекбон хистори для роутов
-    Backbone.history.start();
+    Backbone.history.start({pushState: true});
     this.TodoCollection = new MyApp.Todos.TodoCollection();
   },
 });

@@ -32,10 +32,14 @@ MyApp.module('AppStaticLayout', function(AppStaticLayout, App, Backbone){
 
 		initialize: function(){
 			// Слушаем filterState и если модель изменится то проверяем, правильно ли отображен инпут
-			this.listenTo(App.request('filterState'), 'change:filter', this.hideInput, this);
+			this.listenTo(App.request('filterState'), 'change', this.hideInput, this);
 		},
 		onShow: function(){
 			this.hideInput();
+			this.ui.goRoute.removeClass('active');
+			var route = MyApp.request('filterState').get('filter');
+			$('#'+route).addClass('active');			
+			// alert('onShow header '+route);
 		},
 		// єлементы управления
 		ui: {
@@ -43,7 +47,11 @@ MyApp.module('AppStaticLayout', function(AppStaticLayout, App, Backbone){
 			sort2 : '.second-sort',
 			sort3 : '.third-sort',
 			goRoute : '.go-route',
-			fetchTest : '#fetch'
+			fetchTest : '#fetch',
+			all: '#all',
+			done: '#done',
+			have_done: '#have_done',
+			author_page: '#author_page'
 		},
 
 		// события для ui
@@ -53,12 +61,37 @@ MyApp.module('AppStaticLayout', function(AppStaticLayout, App, Backbone){
 			'click @ui.sort3' : 'sortBegin',
 			'click @ui.goRoute' : 'changeButtonClass',
 			'click @ui.fetchTest' : 'fetchTestGo',
+			'click @ui.all' : 'choiseRouter',
+			'click @ui.done' : 'choiseRouter',
+			'click @ui.have_done' : 'choiseRouter',
+			'click @ui.author_page' : 'choiseRouter',
+		},
+		// onShow: function(){
+			
+		// },
+		choiseRouter: function(e){
+			Backbone.history.navigate(e.target.id, {trigger: true});
 		},
 		// функция обработки значения сортировки
 		sortBegin:function(e){
 			var parameter = $(e.target).attr('sortby');
-			this.collection.goSort(parameter);
+			var direction = $(e.target).attr('gosort');			
+			direction = this.sortToggle(e, direction);
+
+			this.collection.goSort(parameter, direction);
 		},
+		
+		// Проверка атрибута sort-dirrect
+		sortToggle: function(e, direction) {			
+			if(direction) {
+				$(e.target).removeAttr('gosort', false);
+				return true;
+			} else {
+				$(e.target).attr('gosort', true);
+				return false;
+			}
+		},
+
 		// коррекция отображения главного поля ввода
 		hideInput: function(){
 			// создали переменную для input template
@@ -182,6 +215,15 @@ MyApp.module('AppStaticLayout', function(AppStaticLayout, App, Backbone){
 		id: 'author-page',
 		className: 'ovf-a',
 		template: '#author-page-layout',
+		ui: {
+			all: '#all'
+		},
+		events: {
+			'click @ui.all': 'choiseRouter'
+		},
+		choiseRouter: function(e){
+			Backbone.history.navigate(e.target.id, {replace: true, trigger: true});
+		},
 	});
 
 });

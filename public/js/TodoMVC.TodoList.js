@@ -20,7 +20,10 @@ MyApp.module('TodoList', function(TodoList, App, Backbone){
 
 		// что будет выполняться при старте
 		start: function(){
-			
+			// КОСТЫЛЬ
+			this.LoadAppFirst();
+			// \Костыль
+
 			var self = this;
 			// запускаем функцию представления значка загрузки покуда коллекция фетчится
 			App.TodoCollection.on('request', function(){
@@ -32,31 +35,48 @@ MyApp.module('TodoList', function(TodoList, App, Backbone){
 				// console.log('sync is happened');
 				// псевдо-время загрузки с сервера
 				_.delay(function(){
-					App.root.getRegion('popup').empty();
-					// каждая следующая строчка - это вызов функции находящейся в контроллере
-					// которая в свою очередь запускает отведенное ей представление
-					self.showHeader(self.TodoCollection);
-					self.showMain(self.TodoCollection);
-					self.showFooter(self.TodoCollection);
-				}, 1500);
+					App.root.getRegion('popup').empty();					
+				}, 1000);
 			});
 			// фетчим нашу коллекцию с сервера
 			
 			self.TodoCollection.fetch();
 		},
 
+		// для самой первой загрузки приложения
+		LoadAppFirst: function(){			
+			var route = window.location.pathname;			
+			// alert(route);
+			if(route === '/author_page'){				
+				Backbone.history.navigate('/', {replace: false, trigger: false});
+				Backbone.history.navigate(route, {replace: false, trigger: true});
+			} else{
+				if(route === '/all' || route === '/done' || route === '/have_done'){
+					Backbone.history.navigate('/', {replace: false, trigger: false});
+					Backbone.history.navigate(route, {replace: false, trigger: true});
+					this.showAll();
+				} else{
+					var authorPage = new App.AppStaticLayout.AuthorPage({
+						template: '#layout-404'
+					});
+					this.hideAll();
+					App.root.getRegion('header').show(authorPage);
+				}
+			}			
+		},
+
 		showLoading: function(TodoCollection){
-			// создфли экземпляр представления хедера и передали ему коллекцию
+			// создали экземпляр загрузки
 			var loading = new Backbone.Marionette.ItemView({
 				className: 'please-waite',
 				template: '#loading-circle',
 			});
-			// Вставляем наш экземпляр представления header в регион под названием header
+			// Вставляем наш экземпляр представления loading в регион под названием popup
 			App.root.showChildView('popup', loading);
 		},
 
 		showHeader: function(TodoCollection){
-			// создфли экземпляр представления хедера и передали ему коллекцию
+			// создали экземпляр представления хедера и передали ему коллекцию
 			var header = new App.AppStaticLayout.Header({
 				collection: TodoCollection,
 			});
@@ -65,7 +85,7 @@ MyApp.module('TodoList', function(TodoList, App, Backbone){
 		},
 
 		showMain: function(TodoCollection){
-			// создфли экземпляр представления main и передали ему коллекцию
+			// создали экземпляр представления main и передали ему коллекцию
 			var main = new App.TodoList.Views.ListVews({
 				collection: TodoCollection,
 			});
@@ -74,13 +94,14 @@ MyApp.module('TodoList', function(TodoList, App, Backbone){
 		},
 
 		showFooter: function(TodoCollection){
-			// создфли экземпляр представления footer и передали ему коллекцию
+			// создали экземпляр представления footer и передали ему коллекцию
 			var footer = new App.AppStaticLayout.Footer({
 				collection: TodoCollection,
 			});
 			// Вставляем наш экземпляр представления footer в регион под названием footer
 			App.root.showChildView('footer', footer);
 		},
+
 		// очистка регионов
 		hideAll: function(){
 			App.root.getRegion('header').empty();
@@ -88,35 +109,29 @@ MyApp.module('TodoList', function(TodoList, App, Backbone){
 			App.root.getRegion('footer').empty();
 		},
 
+		//general show
+		showAll: function(){
+			this.showHeader(this.TodoCollection);
+			this.showMain(this.TodoCollection);
+			this.showFooter(this.TodoCollection);
+		},
+
 		// Функция обработки значения роута
 		LoadApp: function(route){
-			// route - текущее значение роута
-			// если был указан роут, который соответствует следующему значению
-			// очистим всю страницу
-			if(route === 'author_page') {
+			// alert('i am route '+route);
+			// изменяем значение фильтра
+			MyApp.request('filterState').set('filter', route);
+			if(route === 'author_page'){
 				var authorPage = new App.AppStaticLayout.AuthorPage();
 				this.hideAll();
-				App.root.getRegion('header').show(authorPage);		
-			} else if(route === 'home'){
-				MyApp.request('filterState').set('filter', 'all');
-				// управление главным инпутом
-				MyApp.request('filterState').set('generalInput', true);
-				this.start();
-			} else {
-				// значение фильтра до изменения
-				// console.log(MyApp.request('filterState').get('filter'));
-				// управление отображение главного поля ввода модели
+				App.root.getRegion('header').show(authorPage);
+			} else{				
 				if(route === 'all') {
 					MyApp.request('filterState').set('generalInput', true);
-				} else{
+					this.showAll();					
+				} else if(route === 'done' || route === 'have_done'){
 					MyApp.request('filterState').set('generalInput', false);
-				}
-
-				// изменяем значение фильтра
-				MyApp.request('filterState').set('filter', route);						
-				
-				// значение фильтра после изменения
-				// console.log(MyApp.request('filterState').get('filter'));
+				}			
 			}
 		}
 	});
@@ -127,7 +142,7 @@ MyApp.module('TodoList', function(TodoList, App, Backbone){
 		// создаем экземпляр контроллера
 		var controller = new TodoList.Controller();
 		//указываем экземпляр роутера
-		controller.router = new TodoList.Router({
+		var router = new TodoList.Router({
 			// указали контроллер который относится к этому роуту
 			controller : controller,
 		});

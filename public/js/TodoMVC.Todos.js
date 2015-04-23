@@ -66,6 +66,7 @@ MyApp.module("Todos", function(Todos, App, Backbone){
 			// делаем вычесления для вывода, какой атрибут done присваивать при нажатии на checkAll
 			var setPluck = _.pluck(this.toJSON(), 'done');
 			setPluck = _.difference(setPluck, [true]);
+			// если массив пуст, то все задания выполненны
 			if (!setPluck.length) return true
 			else return false			
 		},
@@ -77,16 +78,25 @@ MyApp.module("Todos", function(Todos, App, Backbone){
 
 		// атрибут сортировки по умолчанию
 		sortAttribute: 'date',
-
+		sortDirection: 'true',
 		// функция смены атрибута сортировки(вызывается при нажатии на соответствующий элемент ui)
-		goSort: function(someValue){
+		goSort: function(someValue, someDirection){
 			this.sortAttribute = someValue;
+			this.sortDirection = someDirection;
+			if(this.sortAttribute === 'title'){
+				this.sortDirection = true;
+			}
 			this.sort();
 		},
 
 		// параметры сортировки
 		comparator: function(model){
-			return model.get(this.sortAttribute);
+			if(this.sortDirection === true){
+				return model.get(this.sortAttribute);
+			} else{
+				return -model.get(this.sortAttribute);
+			}
+			
 		},
 		url: '/api/todos'
 	});

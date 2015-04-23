@@ -144,18 +144,19 @@ MyApp.module('TodoList.Views', function(Views, App, Backbone){
 			this.render();
 		},
 
-		// onRender: function(){
-		// 	console.log('onRender');
-		// },
-
-		onShow: function(){
+		onRender: function(){
 			this.checkDone();
 		},
+
+		// onShow: function(){
+		// 	alert('onShow');
+		// },
 		
 		// check array of done
 		checkDone: function(collection){
 			var flag = this.collection.checkAll();
 			this.ui.checkAll.prop('checked', flag);
+			return flag;
 		}
 	});
 });

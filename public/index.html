@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<title>Marionette • TodoMVC</title>
-		<link rel="stylesheet" href="node_modules/todomvc-app-css/index.css">
+		<link rel="stylesheet" href="/node_modules/todomvc-app-css/index.css">
 
 		<!-- templates -->
 
@@ -20,20 +20,20 @@
 		<script type="text/template" id="header-template">
 			<section class="filter-section">
 				<h3>Filtering by:</h3>
-				<a href="#/all" class="go-route active">All</a>
-				<a href="#/done" class="go-route">Alredy done</a>
-				<a href="#/have_done" class="go-route">Have to do</a>
+				<a id="all" class="go-route active">All</a>
+				<a id="done" class="go-route">Alredy done</a>
+				<a id="have_done" class="go-route">Have to do</a>
 				<button id="fetch">Fetch-test</button>
 			</section>
 			<div id='input-area'>				
 			</div>
-			<a href="#/author_page" class="single-btn">About App</a>
+			<a id="author_page" class="single-btn">About App</a>
 			
 			<div class="sort-section ovf-a">
 				<span class="pull-right">Sort By</span><br>
-				<button class="firs-sort pull-right" sortby=<%-firstSort%>><%-firstSort%></button>
-				<button class="second-sort pull-right" sortby=<%-secondSort%>><%-secondSort%></button>
-				<button class="third-sort pull-right" sortby=<%-thirdSort%>><%-thirdSort%></button>
+				<button gosort='true' class="firs-sort pull-right" sortby=<%-firstSort%>><%-firstSort%></button>
+				<button gosort='true' class="second-sort pull-right" sortby=<%-secondSort%>><%-secondSort%></button>
+				<button gosort='true' class="third-sort pull-right" sortby=<%-thirdSort%>><%-thirdSort%></button>
 			</div>
 		</script>
 
@@ -80,7 +80,12 @@
 		<script type="text/template" id="author-page-layout">
 			<h2>This app is built on<br>backbone.js + Marionette.js</h2>
 			<img src='http://l-lin.github.io/images/marionettejs.png' id="marionette-img">
-			<a href="#/home" class="single-btn"> To Home </a>
+			<a id="all" class="single-btn"> To Home </a>
+		</script>
+		<!-- 404 layout -->
+		<script type="text/template" id="layout-404">
+			<img src="http://www.ozturkelektronik.com.tr/images/404_1.jpg" class="img-404">
+			<a id="all" class="single-btn"> To Home </a>
 		</script>
 		
 		<!-- popup -->
@@ -112,21 +117,21 @@
 		</section>	
 		
 		<!--<script src="node_modules/todomvc-common/base.js"></script>-->
-		<script src="node_modules/jquery/dist/jquery.js"></script>
+		<script src="/node_modules/jquery/dist/jquery.js"></script>
 		<script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>		
-		<script src="node_modules/underscore/underscore.js"></script>
-		<script src="node_modules/backbone/backbone.js"></script>
-		<script src="node_modules/backbone.localstorage/backbone.localStorage.js"></script>
-		<script src="node_modules/backbone.marionette/lib/backbone.marionette.js"></script>
+		<script src="/node_modules/underscore/underscore.js"></script>
+		<script src="/node_modules/backbone/backbone.js"></script>
+		<script src="/node_modules/backbone.localstorage/backbone.localStorage.js"></script>
+		<script src="/node_modules/backbone.marionette/lib/backbone.marionette.js"></script>
 		
 
 		<!-- application -->
-		<script src="js/TodoMVC.js"></script>
-		<script src="js/TodoMVC.Todos.js"></script>
-		<script src="js/TodoMVC.AppStaticLayout.js"></script>
-		<script src="js/TodoMVC.PopUp.js"></script>
-		<script src="js/TodoMVC.TodoList.Views.js"></script>
-		<script src="js/TodoMVC.TodoList.js"></script>
+		<script src="/js/TodoMVC.js"></script>
+		<script src="/js/TodoMVC.Todos.js"></script>
+		<script src="/js/TodoMVC.AppStaticLayout.js"></script>
+		<script src="/js/TodoMVC.PopUp.js"></script>
+		<script src="/js/TodoMVC.TodoList.Views.js"></script>
+		<script src="/js/TodoMVC.TodoList.js"></script>
 		
 		<script>
 			$(function () {
