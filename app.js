@@ -6,56 +6,63 @@ var bodyParser = require('body-parser');
 var app = express();
 
 // массив с начальными моделями
-var todos = [
-    {
-        title: 'first task',
-        done: false,
-        date: '6575675',
-        id: 0
-    },
-    {
-        title: 'second task',
-        done: false,
-        date: '554444',
-        id: 1
-    },
-    {
-        title: 'third task',
-        done: false,
-        date: '222332',
-        id: 2
-    },
-    {
-        title: 'fourth task',
-        done: false,
-        date: '34534566',
-        id: 3
-    },
-    {
-        title: 'fifth task',
-        done: false,
-        date: '5675685867',
-        id: 4
-    },
-    {
-        title: 'six task',
-        done: false,
-        date: '546854867',
-        id: 5
-    },
-    {
-        title: 'seventh task',
-        done: false,
-        date: '5686674856',
-        id: 6
-    },
-    {
-        title: 'eigth task',
-        done: false,
-        date: '5468764863433',
-        id: 7
-    },
-];
+// var todos = [
+//     {
+//         title: 'first task',
+//         done: false,
+//         date: '6575675',
+//         id: 0
+//     },
+//     {
+//         title: 'second task',
+//         done: false,
+//         date: '554444',
+//         id: 1
+//     },
+//     {
+//         title: 'third task',
+//         done: false,
+//         date: '222332',
+//         id: 2
+//     },
+//     {
+//         title: 'fourth task',
+//         done: false,
+//         date: '34534566',
+//         id: 3
+//     },
+//     {
+//         title: 'fifth task',
+//         done: false,
+//         date: '5675685867',
+//         id: 4
+//     },
+//     {
+//         title: 'six task',
+//         done: false,
+//         date: '546854867',
+//         id: 5
+//     },
+//     {
+//         title: 'seventh task',
+//         done: false,
+//         date: '5686674856',
+//         id: 6
+//     },
+//     {
+//         title: 'eigth task',
+//         done: false,
+//         date: '5468764863433',
+//         id: 7
+//     },
+// ];
+
+// Обращаемся к файлу tasks, который находится в этой же дирректории
+var tasks = require('./tasks');
+// присваеваем переменной то, что возвращает нам код в файле
+var todos = tasks.taskList();
+
+
 // переменная в которой происходит подсчет айди
 var nextId = todos.length;
 // Указывается какую статическую дерикторию использовать по умолчанию
@@ -78,6 +85,7 @@ app.use(function (req, res, next) {
 app.get('/api/todos', function(req, res) {
     res.json(todos);
 });
+
 // что будет отдаваться если запрашивается с айди
 app.get('/api/todos/:id', function(req, res) {
     var todo = todos.filter(function(todo) { return todo.id == req.params.id; })[0];
@@ -149,3 +157,4 @@ app.delete('/api/todos/:id', function(req, res) {
 
 // адресс порта
 app.listen(8300);
+console.log('Server side has been started')
