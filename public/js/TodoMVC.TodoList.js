@@ -45,8 +45,8 @@ MyApp.module('TodoList', function(TodoList, App, Backbone){
 
 		// для самой первой загрузки приложения
 		LoadAppFirst: function(){			
-			var route = window.location.pathname;			
-			// alert(route);
+			var route = window.location.pathname;
+			// console.log(route);			
 			if(route === '/author_page'){				
 				Backbone.history.navigate('/', {replace: false, trigger: false});
 				Backbone.history.navigate(route, {replace: false, trigger: true});
