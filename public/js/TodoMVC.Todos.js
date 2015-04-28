@@ -37,7 +37,7 @@ MyApp.module("Todos", function(Todos, App, Backbone){
 				return true;
 			} else if( filterVal === 'done'){
 				return this.get('done');
-			} else if( filterVal === 'have_done' ){
+			} else if( filterVal === 'have-to-do' ){
 				return !this.get('done');
 			}
 		},

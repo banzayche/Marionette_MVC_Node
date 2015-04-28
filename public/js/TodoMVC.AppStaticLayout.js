@@ -26,10 +26,6 @@ MyApp.module('AppStaticLayout', function(AppStaticLayout, App, Backbone){
 			inputarea: '#input-area',
 		},
 
-		fetchTestGo: function(){
-			this.collection.fetch().done(function(){console.log('fetch done')});
-		},		
-
 		initialize: function(){
 			// Слушаем filterState и если модель изменится то проверяем, правильно ли отображен инпут
 			this.listenTo(App.request('filterState'), 'change', this.hideInput, this);
@@ -48,9 +44,10 @@ MyApp.module('AppStaticLayout', function(AppStaticLayout, App, Backbone){
 			sort3 : '.third-sort',
 			goRoute : '.go-route',
 			fetchTest : '#fetch',
+			test404: '#test-404',
 			all: '#all',
 			done: '#done',
-			have_done: '#have_done',
+			have_todo: '#have-to-do',
 			author_page: '#author_page'
 		},
 
@@ -61,14 +58,19 @@ MyApp.module('AppStaticLayout', function(AppStaticLayout, App, Backbone){
 			'click @ui.sort3' : 'sortBegin',
 			'click @ui.goRoute' : 'changeButtonClass',
 			'click @ui.fetchTest' : 'fetchTestGo',
+			'click @ui.test404' : 'test404Go',
 			'click @ui.all' : 'choiseRouter',
 			'click @ui.done' : 'choiseRouter',
-			'click @ui.have_done' : 'choiseRouter',
+			'click @ui.have_todo' : 'choiseRouter',
 			'click @ui.author_page' : 'choiseRouter',
 		},
-		// onShow: function(){
-			
-		// },
+		fetchTestGo: function(){
+			this.collection.fetch().done(function(){console.log('fetch done')});
+		},
+		test404Go: function(){
+			Backbone.history.navigate('fkjsgerpgt', {trigger: true});
+		},	
+
 		choiseRouter: function(e){
 			Backbone.history.navigate(e.target.id, {trigger: true});
 		},

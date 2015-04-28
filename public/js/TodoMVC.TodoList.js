@@ -65,7 +65,6 @@ MyApp.module('TodoList', function(TodoList, App, Backbone){
 		// Функция обработки значения роута
 		LoadApp: function(route){
 			// alert('i am route '+route);
-			console.log(this.TodoCollection);
 			// изменяем значение фильтра
 			MyApp.request('filterState').set('filter', route);
 			// действие для роута
@@ -84,11 +83,10 @@ MyApp.module('TodoList', function(TodoList, App, Backbone){
 			    	App.request('filterState').set('generalInput', true);
 			    	this.showAll();			        
 			        break;
-			    
+			    // код для роута done тот же что и для have-to-do
 			    case 'done':
-					console.log('/done come case');
-			    
-			    case 'have_done':
+								    
+			    case 'have-to-do':
 			    	App.request('filterState').set('generalInput', false);
 			        this.showAll();
 			        break;
