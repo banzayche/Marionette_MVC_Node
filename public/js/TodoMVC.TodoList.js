@@ -16,41 +16,10 @@ MyApp.module('TodoList', function(TodoList, App, Backbone){
 	TodoList.Controller = Marionette.Controller.extend({
 		// создаем коллекцию для наших вьюх
 		initialize: function(){
-			// MyApp.TodoCollection = ;
-			// this.TodoCollection = new MyApp.Todos.TodoCollection();
-			// var self = this;
-			// // запускаем функцию представления значка загрузки покуда коллекция фетчится
-			// this.TodoCollection.on('request', function(){
-			// 	// console.log('request is happened');				
-			// 	self.showLoading();
-			// });
-			// // когда все модели удачно синхронизированны с сервером, можно показывать
-			// MyApp.TodoCollection.on('sync', function(){
-			// 	// console.log('sync is happened');
-			// 	// псевдо-время загрузки с сервера
-			// 	_.delay(function(){
-			// 		MyApp.root.getRegion('popup').empty();					
-			// 	}, 1000);
-			// });
-			// фетчим нашу коллекцию с сервера
-			
-			// self.TodoCollection.fetch();
-		},
-
-		// что будет выполняться при старте
-		// onStart: function(){
-			
-		// },
-
-		showLoading: function(TodoCollection){
-			// создали экземпляр загрузки
-			var loading = new Backbone.Marionette.ItemView({
-				className: 'please-waite',
-				template: '#loading-circle',
-			});
-			// Вставляем наш экземпляр представления loading в регион под названием popup
-			App.root.showChildView('popup', loading);
-		},
+			// задаем коллекцию одну для всего приложения
+			MyApp.TodoCollection = new MyApp.Todos.TodoCollection();
+			this.TodoCollection = MyApp.TodoCollection;
+		},		
 
 		showHeader: function(TodoCollection){
 			// создали экземпляр представления хедера и передали ему коллекцию
@@ -140,12 +109,33 @@ MyApp.module('TodoList', function(TodoList, App, Backbone){
 		});
 	});
 
-	// // Одна из самых главных частей всего приложения - общий старт
-	// MyApp.on('start', function(){
-	// 	// создаем экземпляр router
-		
+	// Одна из самых главных частей всего приложения - общий старт
+	MyApp.on('start', function(){
 
-	// 	// // стартовали контроллер
-	// 	// controller.start();
-	// });
+			var showLoading = function(){
+				// создали экземпляр загрузки
+				var loading = new Backbone.Marionette.ItemView({
+					className: 'please-waite',
+					template: '#loading-circle',
+				});
+				// Вставляем наш экземпляр представления loading в регион под названием popup
+				App.root.showChildView('popup', loading);
+			};
+
+			// запускаем функцию представления значка загрузки покуда коллекция фетчится
+			MyApp.TodoCollection.on('request', function(){
+				console.log('request is happened');				
+				showLoading();
+			});
+			// когда все модели удачно синхронизированны с сервером, можно показывать
+			MyApp.TodoCollection.on('sync', function(){
+				console.log('sync is happened');
+				// псевдо-время загрузки с сервера
+				_.delay(function(){
+					App.root.getRegion('popup').empty();					
+				}, 1000);
+			});
+			// фетчим нашу коллекцию с сервера
+			MyApp.TodoCollection.fetch();
+	});
 });
