@@ -1,9 +1,10 @@
 /*global Backbone */
 'use strict';
 
-MyApp.module('TodoList', function(TodoList, App, Backbone){
+MyApp.module('TodoList', function(TodoList, App, Backbone){	
+
 	// создаем обьект роут
-	TodoList.Router = Marionette.AppRouter.extend({
+	TodoList.Router = Marionette.AppRouter.extend({		
 		// задали роут
 		appRoutes: {
 			// *route - любое значение роута. Вычисление представления будет происходить в указанной функцие
@@ -15,55 +16,31 @@ MyApp.module('TodoList', function(TodoList, App, Backbone){
 	TodoList.Controller = Marionette.Controller.extend({
 		// создаем коллекцию для наших вьюх
 		initialize: function(){
-			this.TodoCollection = App.TodoCollection;
+			// MyApp.TodoCollection = ;
+			// this.TodoCollection = new MyApp.Todos.TodoCollection();
+			// var self = this;
+			// // запускаем функцию представления значка загрузки покуда коллекция фетчится
+			// this.TodoCollection.on('request', function(){
+			// 	// console.log('request is happened');				
+			// 	self.showLoading();
+			// });
+			// // когда все модели удачно синхронизированны с сервером, можно показывать
+			// MyApp.TodoCollection.on('sync', function(){
+			// 	// console.log('sync is happened');
+			// 	// псевдо-время загрузки с сервера
+			// 	_.delay(function(){
+			// 		MyApp.root.getRegion('popup').empty();					
+			// 	}, 1000);
+			// });
+			// фетчим нашу коллекцию с сервера
+			
+			// self.TodoCollection.fetch();
 		},
 
 		// что будет выполняться при старте
-		start: function(){
-			// КОСТЫЛЬ
-			this.LoadAppFirst();
-			// \Костыль
-
-			var self = this;
-			// запускаем функцию представления значка загрузки покуда коллекция фетчится
-			App.TodoCollection.on('request', function(){
-				// console.log('request is happened');				
-				self.showLoading();
-			});
-			// когда все модели удачно синхронизированны с сервером, можно показывать
-			App.TodoCollection.on('sync', function(){
-				// console.log('sync is happened');
-				// псевдо-время загрузки с сервера
-				_.delay(function(){
-					App.root.getRegion('popup').empty();					
-				}, 1000);
-			});
-			// фетчим нашу коллекцию с сервера
+		// onStart: function(){
 			
-			self.TodoCollection.fetch();
-		},
-
-		// для самой первой загрузки приложения
-		LoadAppFirst: function(){			
-			var route = window.location.pathname;
-			// console.log(route);			
-			if(route === '/author_page'){				
-				Backbone.history.navigate('/', {replace: false, trigger: false});
-				Backbone.history.navigate(route, {replace: false, trigger: true});
-			} else{
-				if(route === '/' || route === '/all' || route === '/done' || route === '/have_done'){
-					Backbone.history.navigate('/', {replace: false, trigger: false});
-					Backbone.history.navigate(route, {replace: false, trigger: true});
-					this.showAll();
-				} else{
-					var authorPage = new App.AppStaticLayout.AuthorPage({
-						template: '#layout-404'
-					});
-					this.hideAll();
-					App.root.getRegion('header').show(authorPage);
-				}
-			}			
-		},
+		// },
 
 		showLoading: function(TodoCollection){
 			// создали экземпляр загрузки
@@ -119,35 +96,56 @@ MyApp.module('TodoList', function(TodoList, App, Backbone){
 		// Функция обработки значения роута
 		LoadApp: function(route){
 			// alert('i am route '+route);
+			console.log(this.TodoCollection);
 			// изменяем значение фильтра
 			MyApp.request('filterState').set('filter', route);
-			if(route === 'author_page'){
-				var authorPage = new App.AppStaticLayout.AuthorPage();
-				this.hideAll();
-				App.root.getRegion('header').show(authorPage);
-			} else{				
-				if(route === 'all') {
-					MyApp.request('filterState').set('generalInput', true);
-					this.showAll();					
-				} else if(route === 'done' || route === 'have_done'){
-					MyApp.request('filterState').set('generalInput', false);
-				}			
+			// действие для роута
+			switch(route) {
+			    case 'author_page':
+			        var authorPage = new App.AppStaticLayout.AuthorPage();
+					this.hideAll();
+					App.root.getRegion('header').show(authorPage);
+			        break;
+			    
+			    case '(/)':
+			        Backbone.history.navigate('/all', {replace: false, trigger: true});
+			        break;
+			    
+			    case 'all':
+			    	App.request('filterState').set('generalInput', true);
+			    	this.showAll();			        
+			        break;
+			    
+			    case 'done':
+					console.log('/done come case');
+			    
+			    case 'have_done':
+			    	App.request('filterState').set('generalInput', false);
+			        this.showAll();
+			        break;
+			    default:
+			        var authorPage = new App.AppStaticLayout.AuthorPage({
+						template: '#layout-404'
+					});
+					this.hideAll();
+					App.root.getRegion('header').show(authorPage);
+				};
 			}
-		}
-	});
-
-
-	// Одна из самых главных частей всего приложения - общий старт
-	MyApp.on('start', function(){
-		// создаем экземпляр контроллера
-		var controller = new TodoList.Controller();
-		//указываем экземпляр роутера
-		var router = new TodoList.Router({
-			// указали контроллер который относится к этому роуту
-			controller : controller,
 		});
 
-		// стартовали контроллер
-		controller.start();
+	$( document ).ready(function() {
+    	var controller = new TodoList.Controller();
+		var router = new TodoList.Router({
+			controller: controller,
+		});
 	});
+
+	// // Одна из самых главных частей всего приложения - общий старт
+	// MyApp.on('start', function(){
+	// 	// создаем экземпляр router
+		
+
+	// 	// // стартовали контроллер
+	// 	// controller.start();
+	// });
 });

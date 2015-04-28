@@ -144,9 +144,9 @@ MyApp.module('TodoList.Views', function(Views, App, Backbone){
 			this.render();
 		},
 
-		onRender: function(){
-			this.checkDone();
-		},
+		// onRender: function(){
+		// 	this.checkDone();
+		// },
 
 		// onShow: function(){
 		// 	alert('onShow');
