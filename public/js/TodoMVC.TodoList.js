@@ -83,13 +83,14 @@ MyApp.module('TodoList', function(TodoList, App, Backbone){
 			    	App.request('filterState').set('generalInput', true);
 			    	this.showAll();			        
 			        break;
+
 			    // код для роута done тот же что и для have-to-do
-			    case 'done':
-								    
+			    case 'done':								    
 			    case 'have-to-do':
 			    	App.request('filterState').set('generalInput', false);
 			        this.showAll();
 			        break;
+			        
 			    default:
 			        var authorPage = new App.AppStaticLayout.AuthorPage({
 						template: '#layout-404'
