@@ -64,7 +64,7 @@ MyApp.module('TodoList', function(TodoList, App, Backbone){
 
 		// Функция обработки значения роута
 		LoadApp: function(route){
-			// alert('i am route '+route);
+			// alert('i am route '+'+'+route+'+');
 			// изменяем значение фильтра
 			MyApp.request('filterState').set('filter', route);
 			// действие для роута
@@ -75,7 +75,7 @@ MyApp.module('TodoList', function(TodoList, App, Backbone){
 					App.root.getRegion('header').show(authorPage);
 			        break;
 			    
-			    case '(/)':
+			    case null:
 			        Backbone.history.navigate('/all', {replace: false, trigger: true});
 			        break;
 			    
