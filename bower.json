@@ -1,0 +1,9 @@
+{
+ "name": "myProject",
+ "version": "1.0.0",
+ "dependencies": {
+    "backbone.localstorage": "~1.1.16",
+    "backbone.marionette": "~2.4.1",
+    "jquery-ui": "~1.11.4"
+  }
+}
